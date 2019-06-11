@@ -4,24 +4,6 @@ if (isset($_SESSION['login'])) {
     header("Location: index.php");
     die();
 }
-
-include "class.php";
-
-if (isset($_POST["username"]) && isset($_POST["password"])) {
-    $u = new User();
-    $username = (string) $_POST["username"];
-    $password = (string) $_POST["password"];
-    if (strlen($username) < 20 && strlen($username) > 2 && strlen($password) > 1) {
-        if ($u->add_user($username, $password)) {
-            header("Location: login.php?register");
-            die();
-        } else {
-            echo "<script>toast('此用户名已被使用', 'warning');</script>";
-            die();
-        }
-    }
-    echo "<script>toast('请输入有效用户名和密码', 'warning');</script>";
-}
 ?>
 
 <!doctype html>
@@ -69,3 +51,24 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 <script src="static/js/bootstrap.bundle.min.js"></script>
 <script src="static/js/toast.js"></script>
 </html>
+
+
+<?php
+include "class.php";
+
+if (isset($_POST["username"]) && isset($_POST["password"])) {
+    $u = new User();
+    $username = (string) $_POST["username"];
+    $password = (string) $_POST["password"];
+    if (strlen($username) < 20 && strlen($username) > 2 && strlen($password) > 1) {
+        if ($u->add_user($username, $password)) {
+            echo("<script>window.location.href='login.php?register';</script>");
+            die();
+        } else {
+            echo "<script>toast('此用户名已被使用', 'warning');</script>";
+            die();
+        }
+    }
+    echo "<script>toast('请输入有效用户名和密码', 'warning');</script>";
+}
+?>

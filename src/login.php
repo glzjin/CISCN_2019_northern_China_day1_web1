@@ -4,30 +4,6 @@ if (isset($_SESSION['login'])) {
     header("Location: index.php");
     die();
 }
-
-include "class.php";
-
-if (isset($_GET['register'])) {
-    echo "<script>toast('注册成功', 'info');</script>";
-}
-
-if (isset($_POST["username"]) && isset($_POST["password"])) {
-    $u = new User();
-    $username = (string) $_POST["username"];
-    $password = (string) $_POST["password"];
-    if (strlen($username) < 20 && $u->verify_user($username, $password)) {
-        $_SESSION['login'] = true;
-        $_SESSION['username'] = htmlentities($username);
-        $sandbox = "uploads/" . sha1($_SESSION['username'] . "sftUahRiTz") . "/";
-        if (!is_dir($sandbox)) {
-            mkdir($sandbox);
-        }
-        $_SESSION['sandbox'] = $sandbox;
-        header("Location: index.php");
-        die();
-    }
-    echo "<script>toast('账号或密码错误', 'warning');</script>";
-}
 ?>
 
 <!doctype html>
@@ -76,3 +52,30 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 <script src="static/js/bootstrap.bundle.min.js"></script>
 <script src="static/js/toast.js"></script>
 </html>
+
+
+<?php
+include "class.php";
+
+if (isset($_GET['register'])) {
+    echo "<script>toast('注册成功', 'info');</script>";
+}
+
+if (isset($_POST["username"]) && isset($_POST["password"])) {
+    $u = new User();
+    $username = (string) $_POST["username"];
+    $password = (string) $_POST["password"];
+    if (strlen($username) < 20 && $u->verify_user($username, $password)) {
+        $_SESSION['login'] = true;
+        $_SESSION['username'] = htmlentities($username);
+        $sandbox = "uploads/" . sha1($_SESSION['username'] . "sftUahRiTz") . "/";
+        if (!is_dir($sandbox)) {
+            mkdir($sandbox);
+        }
+        $_SESSION['sandbox'] = $sandbox;
+        echo("<script>window.location.href='index.php';</script>");
+        die();
+    }
+    echo "<script>toast('账号或密码错误', 'warning');</script>";
+}
+?>
